@@ -1,14 +1,18 @@
 package bd;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 
 public class InsertController {
 
@@ -39,6 +43,8 @@ public class InsertController {
     @FXML
     private TextField albumTextField;
 
+    File file = null;
+
     @FXML
     public void initialize() {
         
@@ -58,10 +64,32 @@ public class InsertController {
 
     private void addAlbumTextField() {
         if (albumTextField == null) {
+
+            HBox albumHBox = new HBox();
+            rootVBox.getChildren().add(rootVBox.getChildren().size() - 1, albumHBox);
+            albumHBox.setSpacing(225);
+
             albumTextField = new TextField();
             albumTextField.setPromptText("Nazwa płyty");
-            rootVBox.getChildren().add(rootVBox.getChildren().size() - 1, albumTextField);
+            albumHBox.getChildren().add(albumHBox.getChildren().size(), albumTextField);
+
+            Button filePickerButton = new Button("Wybierz okładkę");
+            albumHBox.getChildren().add(albumHBox.getChildren().size(), filePickerButton);
+
+            Label fileLabel = new Label();
+            rootVBox.getChildren().add(rootVBox.getChildren().size() - 1, fileLabel);
+
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+
+            filePickerButton.setOnAction(event -> {
+                file = fileChooser.showOpenDialog(filePickerButton.getScene().getWindow());
+                if (file != null) {
+                    fileLabel.setText(file.getPath());
+                }
+            });
         }
+        
     }
 
     private void removeAlbumTextField() {
@@ -74,13 +102,19 @@ public class InsertController {
 
     @FXML
     void onAddClick(ActionEvent event) throws IOException {
-        if(artistName.getText().trim().isEmpty() || songName.getText().trim().isEmpty()){
+        if(artistName.getText().trim().isEmpty() || songName.getText().trim().isEmpty() || 
+                             (albumRadio.isSelected() && albumTextField.getText().trim().isEmpty())){
             return;
         }
-        
-        int yearInt = Integer.parseInt(year.getText());
-        TempData.setData(songName.getText(),artistName.getText(),yearInt) ;
-        if( Utilities.checkYear(yearInt)){
+        String tempAlbumName = null;
+        if(albumTextField != null){
+            tempAlbumName = albumTextField.getText();
+        }
+        Integer songYearInt = Integer.valueOf(year.getText());
+        // Integer albumYearInt = Integer.valueOf(albumTextField.getText());
+        Integer albumYearInt = songYearInt; // Implement
+        TempData.setData(songName.getText(),artistName.getText(),tempAlbumName,file,songYearInt,albumYearInt) ;
+        if( Utilities.checkYear(songYearInt)){
             try {
                 if(!DatabaseManager.InDatabase(artistName.getText(),"artysta")){
                     Utilities.showNotFound(artistName.getText());
@@ -98,18 +132,3 @@ public class InsertController {
     }
 
 }
-
-// try { 
-//     //  Wstawianie rekordow do bazy danych
-//        //  Wykorzystanie metody executeUpdate()  
-//        PreparedStatement pst = c.prepareStatement( "INSERT INTO lab11.kursline (kurs_id,wykladowca_id) VALUES (?,?)" );
-//        pst.setInt(1,k_index);
-//        pst.setInt(2,w_index);
-//         int rows ;
-//        rows = pst.executeUpdate();
-//        System.out.print("Polecenie 2 -  INSERT - ilosc dodanych rekordow: ") ;
-//        System.out.println(rows) ;
-          
-//          }
-//        catch(SQLException e)  {
-//            System.out.println("Blad podczas przetwarzania danych:"+e) ;   }  

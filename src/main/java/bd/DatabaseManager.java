@@ -1,5 +1,7 @@
 package bd;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -39,12 +41,17 @@ public class DatabaseManager {
         try { 
             PreparedStatement pst = connection.prepareStatement("SELECT id FROM projekt.artysta where nazwa=? ",ResultSet.CONCUR_UPDATABLE);
             pst.setString(1, name);
+
             ResultSet rs = pst.executeQuery();
             if (rs.next()) {
+                int id = rs.getInt(1);
                 rs.close();
                 pst.close();
-                return rs.getInt(1);
+                return id;
             }
+    
+            rs.close();
+            pst.close();
         }catch(Exception e){
             Utilities.showError(e);
         }
@@ -56,8 +63,9 @@ public class DatabaseManager {
             PreparedStatement pst = connection.prepareStatement("SELECT id FROM projekt.piosenka where nazwa=? ORDER BY id DESC LIMIT 1",ResultSet.CONCUR_UPDATABLE);
             pst.setString(1, name);
             ResultSet rs = pst.executeQuery();
-            rs.next();
-            return rs.getInt(1);
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
         }catch(Exception e){
             
             Utilities.showError(e);
@@ -85,9 +93,9 @@ public class DatabaseManager {
         try { 
             PreparedStatement pstSong = getConnection().prepareStatement( "INSERT INTO projekt.piosenka (nazwa,napisana) VALUES (?,?)" );
             pstSong.setString(1, TempData.getSongName());
-            pstSong.setInt(2, TempData.getYear());
+            pstSong.setInt(2, TempData.getSongYear());
             int rows = pstSong.executeUpdate();
-            System.out.print("Polecenie -  INSERT Song - ilosc dodanych rekordow: " + String.valueOf(rows));
+            System.out.println("Polecenie -  INSERT Song - ilosc dodanych rekordow: " + String.valueOf(rows));
             insertSongExtraTable(getSongLastID(TempData.getSongName()),getArtistID(TempData.getArtistName()));
         }catch(Exception e){
             Utilities.showError(e);
@@ -100,7 +108,33 @@ public class DatabaseManager {
             pst.setInt(1, songID);
             pst.setInt(2, artistID);
             int rows = pst.executeUpdate();
-            System.out.print("Polecenie -  INSERT SongArtistTable - ilosc dodanych rekordow: " + String.valueOf(rows));
+            System.out.println("Polecenie -  INSERT SongArtistTable - ilosc dodanych rekordow: " + String.valueOf(rows));
+            if(TempData.getAlbumName() != null){
+                insertAlbum(songID, artistID);
+            }
+        }catch(Exception e){
+            Utilities.showError(e);
+        }
+    }
+
+    public static void insertAlbum(int songID, int artistID){
+        try { 
+            PreparedStatement pst = getConnection().prepareStatement( "INSERT INTO projekt.plyta (piosenka_id,artysta_id,nazwa,napisana,okladka) VALUES (?,?,?,?,?)" );
+            pst.setInt(1, songID);
+            pst.setInt(2, artistID);
+            pst.setString(3, TempData.getAlbumName());
+            pst.setInt(4, TempData.getSongYear()); // Change with different implementation
+            
+            File tempFile = TempData.getFile();
+            if (tempFile != null) {
+            FileInputStream fis = new FileInputStream(tempFile);
+            pst.setBinaryStream(5, fis, (int) tempFile.length());
+            } else {
+                pst.setNull(5, java.sql.Types.BINARY);
+            }
+
+            int rows = pst.executeUpdate();
+            System.out.println("Polecenie -  INSERT Album - ilosc dodanych rekordow: " + String.valueOf(rows));
         }catch(Exception e){
             Utilities.showError(e);
         }
@@ -113,7 +147,7 @@ public class DatabaseManager {
             pstArtist.setInt(2, start);
             pstArtist.setInt(3,end);
             int rows = pstArtist.executeUpdate();
-            System.out.print("Polecenie -  INSERT Artist - ilosc dodanych rekordow: " + String.valueOf(rows));
+            System.out.println("Polecenie -  INSERT Artist - ilosc dodanych rekordow: " + String.valueOf(rows));
         }catch(Exception e){
             Utilities.showError(e);
         }

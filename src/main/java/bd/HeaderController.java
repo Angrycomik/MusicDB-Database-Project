@@ -16,4 +16,9 @@ public class HeaderController {
         App.setRoot("mainscene");
     }
 
+    @FXML
+    void onImportClick(ActionEvent event) throws IOException {
+        App.setRoot("insertsong");
+    }
+
 }

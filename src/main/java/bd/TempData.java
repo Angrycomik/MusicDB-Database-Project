@@ -1,14 +1,20 @@
 package bd;
-
+import java.io.File;
 public class TempData {
     private static String _songName;
     private static String _artistName;
-    private static int _year;
+    private static File _file;
+    private static String _albumName;
+    private static Integer _songYear;
+    private static Integer _albumYear;
 
-    public static void setData(String songName, String artistName, int year) {
+    public static void setData(String songName, String artistName,String albumName,File file, Integer songYear,Integer albumYear) {
         _songName = songName;
         _artistName = artistName;
-        _year = year;
+        _albumName = albumName;
+        _file = file;
+        _songYear = songYear;
+        _albumYear = albumYear;
     }
 
     public static String getSongName() {
@@ -19,13 +25,24 @@ public class TempData {
         return _artistName;
     }
 
-    public static int getYear() {
-        return _year;
+    public static String getAlbumName() {
+        return _albumName;
+    }
+
+    public static File getFile() {
+        return _file;
+    }
+
+    public static int getSongYear() {
+        return _songYear;
     }
 
     public static void clear() {
         _songName = null;
         _artistName = null;
-        _year = 0;
+        _albumName = null;
+        _file = null;
+        _songYear = 0;
+        _albumYear = null;
     }
 }
