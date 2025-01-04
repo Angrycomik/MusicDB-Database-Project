@@ -1,7 +1,11 @@
 package bd;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,9 +14,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+
 
 public class InsertController {
 
@@ -21,6 +29,9 @@ public class InsertController {
 
     @FXML
     private TextField artistName;
+
+    @FXML
+    private Pane imagePane;
 
     @FXML
     private RadioButton albumRadio;
@@ -85,7 +96,22 @@ public class InsertController {
             filePickerButton.setOnAction(event -> {
                 file = fileChooser.showOpenDialog(filePickerButton.getScene().getWindow());
                 if (file != null) {
-                    fileLabel.setText(file.getPath());
+                    try {
+                        fileLabel.setText(file.getPath());
+                        BufferedImage img = Scalr.resize(ImageIO.read(file), 256,256);
+                        File resizedFile = new File("temp.jpg");
+                        ImageIO.write(img, "jpg", resizedFile);
+                        file = resizedFile;
+                        Image image = new Image(new FileInputStream("temp.jpg"));
+                        ImageView imageView = new ImageView(image); 
+                        imageView.setPreserveRatio(true);
+                        imagePane.getChildren().clear();
+                        imagePane.getChildren().add(imageView);
+                        imageView.setLayoutX(182);
+                        imageView.setLayoutY(50);
+                    } catch (Exception e) {
+                        Utilities.showError(e);
+                    }
                 }
             });
         }

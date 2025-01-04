@@ -44,5 +44,9 @@ public class TempData {
         _file = null;
         _songYear = 0;
         _albumYear = null;
+        File tempFile = new File("temp.jpg");
+        if (tempFile.exists()) {
+            tempFile.delete();
+        }
     }
 }
