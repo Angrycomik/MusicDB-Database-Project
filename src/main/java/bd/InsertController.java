@@ -98,7 +98,7 @@ public class InsertController {
                 if (file != null) {
                     try {
                         fileLabel.setText(file.getPath());
-                        BufferedImage img = Scalr.resize(ImageIO.read(file), 256,256);
+                        BufferedImage img = Scalr.resize(ImageIO.read(file), 200,150);
                         File resizedFile = new File("temp.jpg");
                         ImageIO.write(img, "jpg", resizedFile);
                         file = resizedFile;

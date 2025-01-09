@@ -20,6 +20,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("mainscene"));
         stage.setScene(scene);
         stage.show();
+        // ReadJsonData.fun();
     }
 
     static void setRoot(String fxml) throws IOException {

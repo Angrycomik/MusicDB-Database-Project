@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bd.SearchController">
+<top>
+    <fx:include source="Header.fxml" />
+</top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Search">
+               <font>
+                  <Font name="Arial" size="48.0" />
+               </font>
+            </Label>
+            <TextField maxWidth="-Infinity" prefWidth="150.0" promptText="Search..." />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="300.0">
+               <children>
+                  <Label text="Artists">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <Label text="Songs">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+                  <Label text="Albums">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="397.0" prefWidth="1280.0" spacing="100.0">
+               <children>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox fx:id="artistBox" layoutX="-2.0" layoutY="50.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox fx:id="songBox" layoutX="31.0" layoutY="-27.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+                  <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox fx:id="albumBox" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

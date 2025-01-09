@@ -1,0 +1,23 @@
+[
+    {
+      "albumImagePath": "cover1.jpg",
+      "groupImagePaht": "image1.jpg",
+      "title": "Song Title 1",
+      "album": "Album Name 1",
+      "artist": "Artist Name 1",
+      "carrer-start": "start year 1",
+      "career-end": "career end 1",
+      "written": "Date 1"
+    },
+    {
+        "albumImagePath": "cover2.jpg",
+        "groupImagePaht": "image2.jpg",
+        "title": "Song Title 2",
+        "album": "Album Name 2",
+        "artist": "Artist Name 2",
+        "carrer-start": "start year 2",
+        "career-end": "career end 2",
+        "written": "Date 2"
+    }
+  ]
+  

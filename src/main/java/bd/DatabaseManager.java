@@ -61,7 +61,6 @@ public class DatabaseManager {
             rs.close();
             pst.close();
         }catch(Exception e){
-            System.out.println("Error is in GETALBUMID");
             Utilities.showError(e);
         }
         return -1;
@@ -169,7 +168,6 @@ public class DatabaseManager {
             System.out.println("Polecenie -  INSERT Album - ilosc dodanych rekordow: " + String.valueOf(rows));
             insertAlbumExtraTable(songID, getAlbumID(TempData.getAlbumName(), artistID));
         }catch(Exception e){
-            System.out.println("Error is in insertAlbum");
             Utilities.showError(e);
         }
     }
@@ -182,18 +180,21 @@ public class DatabaseManager {
             int rows = pst.executeUpdate();
             System.out.println("Polecenie -  INSERT AlbumExtraTable - ilosc dodanych rekordow: " + String.valueOf(rows));
         } catch (Exception e) {
-            System.out.println("Error is in albumextratable");
-
             Utilities.showError(e);
         }
     }
 
-    public static void insertArtist(String name, int start,int end){
+    public static void insertArtist(String name, Integer start,Integer end){
         try { 
             PreparedStatement pstArtist = DatabaseManager.getConnection().prepareStatement( "INSERT INTO projekt.artysta (nazwa,poczatek_kariery,koniec_kariery) VALUES (?,?,?)" );
             pstArtist.setString(1, name);
             pstArtist.setInt(2, start);
-            pstArtist.setInt(3,end);
+            // pstArtist.setInt(3,end);
+            if(end != null){
+                pstArtist.setInt(3,end);
+            }else{
+                pstArtist.setNull(3, java.sql.Types.NULL);
+            }
             int rows = pstArtist.executeUpdate();
             System.out.println("Polecenie -  INSERT Artist - ilosc dodanych rekordow: " + String.valueOf(rows));
         }catch(Exception e){
@@ -217,7 +218,7 @@ public class DatabaseManager {
         return size;
     }
 
-    public static void getSongInfo(int id,ArrayList<Label> songNameList,ArrayList<Label> albumNameList,ArrayList<Label> artistNameList,ArrayList<ImageView> imageList){
+    public static void populateGrid(int id,ArrayList<Label> songNameList,ArrayList<Label> albumNameList,ArrayList<Label> artistNameList,ArrayList<ImageView> imageList){
         int size = -1;
         try {
             CallableStatement cst = getConnection().prepareCall( "{call projekt.getAllSongInfo(?)}" );
@@ -231,7 +232,13 @@ public class DatabaseManager {
                 artistNameList.add(new Label(rs.getString("nazwa_artysty")));
                 byteArray = rs.getBytes("okladka");
             }
-            Image img = new Image(new ByteArrayInputStream(byteArray));
+            Image img;
+            if(byteArray == null){
+                 img = new Image(new FileInputStream("covers\\logo.png"));
+            }else{
+                img = new Image(new ByteArrayInputStream(byteArray));
+            }
+
             imageList.add(new ImageView(img));
             rs.close();      
             cst.close();
@@ -239,6 +246,7 @@ public class DatabaseManager {
             Utilities.showError(e);
         }
     }
+
 }
 
  
