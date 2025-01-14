@@ -18,9 +18,15 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("mainscene"));
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
+        
         stage.show();
+        
         // ReadJsonData.fun();
+        //  DatabaseManager.insertArtist("artist",2003,2004);
+        // DatabaseManager.insertSong("song", "artist", 1984);
+        // DatabaseManager.insertAlbum("song",1,"loliks",1945);
     }
 
     static void setRoot(String fxml) throws IOException {

@@ -15,18 +15,18 @@
    <center>
       <GridPane fx:id="grid" alignment="CENTER" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-          <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+          <RowConstraints fillHeight="false" minHeight="10.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+          <RowConstraints fillHeight="false" minHeight="10.0" valignment="BOTTOM" vgrow="SOMETIMES" />
+          <RowConstraints fillHeight="false" minHeight="10.0" valignment="BOTTOM" vgrow="SOMETIMES" />
         </rowConstraints>
          <BorderPane.margin>
-            <Insets bottom="5.0" left="75.0" top="5.0" />
+            <Insets bottom="5.0" left="35.0" top="5.0" />
          </BorderPane.margin>
       </GridPane>
    </center>

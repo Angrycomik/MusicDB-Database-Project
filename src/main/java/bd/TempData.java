@@ -2,8 +2,8 @@ package bd;
 import java.io.File;
 import java.util.ArrayList;
 
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 public class TempData {
     private static String _songName;
     private static String _artistName;
@@ -12,9 +12,7 @@ public class TempData {
     private static Integer _songYear;
     private static Integer _albumYear;
 
-    private static ArrayList<Label> gridSongNameList;
-    private static ArrayList<Label> gridArtistNameList;
-    private static ArrayList<Label> gridAlbumNameList;
+    private static ArrayList<VBox> gridBoxList;
     private static ArrayList<ImageView> gridImageList;
 
     private static boolean gridIsSet = false;
@@ -50,25 +48,14 @@ public class TempData {
     public static int getSongYear() {
         return _songYear;
     }
-    public static void setGrid(ArrayList<Label> gridSongNameList, ArrayList<Label> gridArtistNameList,
-                               ArrayList<Label> gridAlbumNameList,   ArrayList<ImageView> gridImageList) {
-    TempData.gridSongNameList = gridSongNameList;
-    TempData.gridArtistNameList = gridArtistNameList;
-    TempData.gridAlbumNameList = gridAlbumNameList;
+    public static void setGrid(ArrayList<VBox> gridBoxList, ArrayList<ImageView> gridImageList) {
+    TempData.gridBoxList = gridBoxList;
     TempData.gridImageList = gridImageList;
     gridIsSet = true;
     }
 
-    public static ArrayList<Label> getGridSongNameList() {
-        return gridSongNameList;
-    }
-
-    public static ArrayList<Label> getGridArtistNameList() {
-        return gridArtistNameList;
-    }
-
-    public static ArrayList<Label> getGridAlbumNameList() {
-        return gridAlbumNameList;
+    public static ArrayList<VBox> getGridBoxList() {
+        return gridBoxList;
     }
 
     public static ArrayList<ImageView> getGridImageList() {

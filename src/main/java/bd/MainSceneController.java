@@ -6,10 +6,10 @@ import java.util.Random;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 
 public class MainSceneController {
 
@@ -25,12 +25,14 @@ public class MainSceneController {
     
     @FXML
     public void initialize() {
-        // grid.setAlignment(Pos.CENTER); 
-        if (!TempData.isGridSet()) {
-            makeNewGrid();
-        } else {
-            makeGridFromTempData();
+        if(DatabaseManager.getDBLenght() > 12){
+            if (!TempData.isGridSet()) {
+                makeNewGrid();
+            } else {
+                makeGridFromTempData();
+            }
         }
+
     }
 
     @FXML
@@ -40,37 +42,34 @@ public class MainSceneController {
     
     private void makeNewGrid() {
         clearGrid();
-        ArrayList<Label> songNameList = new ArrayList<>();
-        ArrayList<Label> artistNameList = new ArrayList<>();
-        ArrayList<Label> albumNameList = new ArrayList<>();
+        ArrayList<VBox> boxList = new ArrayList<>();
         ArrayList<ImageView> imageList = new ArrayList<>();
         
         int size = DatabaseManager.getDBLenght();
         ArrayList<Integer> songList = randomList(size);
     
         for (int i : songList) {
-            DatabaseManager.populateGrid(i, songNameList, albumNameList, artistNameList, imageList);
+            boxList.add(DatabaseManager.populateGrid(i, imageList));
         }
     
-        populateGrid(grid, songNameList, imageList);
-        TempData.setGrid(songNameList, artistNameList, albumNameList, imageList);
+        populateGrid(grid, boxList,imageList);
+        TempData.setGrid(boxList, imageList);
     }
     
     private void makeGridFromTempData() {
-        ArrayList<Label> songNameList = TempData.getGridSongNameList();
-        ArrayList<Label> artistNameList = TempData.getGridArtistNameList();
-        ArrayList<Label> albumNameList = TempData.getGridAlbumNameList();
+        ArrayList<VBox> boxList = TempData.getGridBoxList();
         ArrayList<ImageView> imageList = TempData.getGridImageList();
     
-        populateGrid(grid, songNameList, imageList);
+        populateGrid(grid, boxList, imageList);
     }
     
-    private void populateGrid(GridPane grid, ArrayList<Label> songNameList, ArrayList<ImageView> imageList) {
+    private void populateGrid(GridPane grid, ArrayList<VBox> boxList, ArrayList<ImageView> imageList) {
         int count = 0;
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 3; j++) {
                 grid.add(imageList.get(count), i, j);
-                grid.add(songNameList.get(count), i, j);
+                grid.add(boxList.get(count), i, j);
+
                 count++;
             }
         }

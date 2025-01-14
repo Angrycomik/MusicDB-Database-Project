@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<HBox alignment="CENTER" prefHeight="100.0" spacing="60.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bd.HeaderController">
+<HBox alignment="CENTER" prefHeight="100.0" spacing="60.0" styleClass="hboxback" stylesheets="@style.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="bd.HeaderController">
    <children>
       <Pane prefHeight="130.0" prefWidth="355.0" />
-      <Button fx:id="logoBtn" mnemonicParsing="false" onAction="#logoBtnClick" prefHeight="130.0" prefWidth="375.0" text="MusicDB" textAlignment="CENTER">
+      <Button fx:id="logoBtn" mnemonicParsing="false" onAction="#logoBtnClick" prefHeight="99.0" prefWidth="369.0" styleClass="logo" stylesheets="@style.css" text="MusicDB" textAlignment="CENTER">
          <font>
             <Font name="Bauhaus 93" size="72.0" />
          </font></Button>
       <AnchorPane prefHeight="130.0" prefWidth="330.0">
          <children>
-            <HBox alignment="CENTER" focusTraversable="true" prefHeight="130.0" prefWidth="325.0" spacing="50.0">
+            <HBox alignment="CENTER_LEFT" focusTraversable="true" prefHeight="130.0" prefWidth="325.0" spacing="50.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#onImportClick" prefHeight="100.0" prefWidth="65.0" text="Import Song" textAlignment="CENTER" wrapText="true" />
-                  <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="65.0" text="Button" />
-                  <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="65.0" text="Button" />
+                  <Button mnemonicParsing="false" onAction="#onImportClick" prefHeight="100.0" prefWidth="65.0" styleClass="headerbtn" stylesheets="@style.css" text="Import Song" textAlignment="CENTER" wrapText="true" />
+                  <Button mnemonicParsing="false" onAction="#onSearchClick" prefHeight="100.0" prefWidth="65.0" styleClass="headerbtn" stylesheets="@style.css" text="Search" />
+                  <Button mnemonicParsing="false" prefHeight="100.0" prefWidth="65.0" styleClass="headerbtn" stylesheets="@style.css" text="Button" />
                </children>
+               <padding>
+                  <Insets right="10.0" />
+               </padding>
             </HBox>
          </children>
       </AnchorPane>

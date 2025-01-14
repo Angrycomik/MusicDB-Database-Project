@@ -21,7 +21,7 @@
                   <Font name="Arial" size="48.0" />
                </font>
             </Label>
-            <TextField maxWidth="-Infinity" prefWidth="150.0" promptText="Search..." />
+            <TextField maxWidth="-Infinity" onKeyTyped="#onKey" prefWidth="150.0" promptText="Search..." />
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="300.0">
                <children>
                   <Label text="Artists">
@@ -43,29 +43,29 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="397.0" prefWidth="1280.0" spacing="100.0">
                <children>
-                  <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0">
+                  <ScrollPane fx:id="artistPane" focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #f0fff0;">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: #f0fff0;">
                            <children>
-                              <VBox fx:id="artistBox" layoutX="-2.0" layoutY="50.0" />
+                              <VBox fx:id="artistBox" layoutX="-2.0" layoutY="50.0" style="-fx-background-color: #f0fff0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                     </content>
                   </ScrollPane>
-                  <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0">
+                  <ScrollPane fx:id="songPane" focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #f0fff0;">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: #f0fff0;">
                            <children>
-                              <VBox fx:id="songBox" layoutX="31.0" layoutY="-27.0" />
+                              <VBox fx:id="songBox" layoutX="3.0" layoutY="-2.0" style="-fx-background-color: #f0fff0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                     </content>
                   </ScrollPane>
-                  <ScrollPane hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0">
+                  <ScrollPane fx:id="albumPane" focusTraversable="false" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #f0fff0;">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                      <AnchorPane minHeight="0.0" minWidth="0.0" style="-fx-background-color: #f0fff0;">
                            <children>
-                              <VBox fx:id="albumBox" />
+                              <VBox fx:id="albumBox" style="-fx-background-color: #f0fff0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                     </content>

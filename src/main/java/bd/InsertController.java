@@ -128,33 +128,35 @@ public class InsertController {
 
     @FXML
     void onAddClick(ActionEvent event) throws IOException {
-        if(artistName.getText().trim().isEmpty() || songName.getText().trim().isEmpty() || 
-                             (albumRadio.isSelected() && albumTextField.getText().trim().isEmpty())){
-            return;
-        }
         String tempAlbumName = null;
         if(albumTextField != null){
             tempAlbumName = albumTextField.getText();
         }
-        Integer songYearInt = Integer.valueOf(year.getText());
+        Integer songYearInt = null;
+        if(year.getText() != ""){
+            songYearInt = Integer.valueOf(year.getText());
+        }
         // Integer albumYearInt = Integer.valueOf(albumTextField.getText());
         Integer albumYearInt = songYearInt; // Implement
         TempData.setData(songName.getText(),artistName.getText(),tempAlbumName,file,songYearInt,albumYearInt) ;
-        if( Utilities.checkYear(songYearInt)){
-            try {
-                if(!DatabaseManager.InDatabase(artistName.getText(),"artysta")){
-                    Utilities.showNotFound(artistName.getText());
-                    App.setRoot("insertartist");
-                }else{
-                    DatabaseManager.insertSong();
-                    TempData.clear();
+        
+        try {
+            if(!artistName.getText().trim().isEmpty() && !DatabaseManager.InDatabase(artistName.getText(),"artysta")){
+                Utilities.showNotFound(artistName.getText());
+                App.setRoot("insertartist");
+            }else{
+                if(DatabaseManager.insertSong(songName.getText(),artistName.getText(),songYearInt)){
+                    if(tempAlbumName!=null){
+                        DatabaseManager.insertAlbum(songName.getText(),artistName.getText(),DatabaseManager.getArtistID(artistName.getText()),tempAlbumName,albumYearInt);
+                    }
                     App.setRoot("mainscene");
-                } 
-            } catch (Exception e) {
-                Utilities.showError(e);
-            }
-
+                }
+                TempData.clear();
+            } 
+        } catch (Exception e) {
+            Utilities.showError(e);
         }
+
     }
 
 }

@@ -20,5 +20,9 @@ public class HeaderController {
     void onImportClick(ActionEvent event) throws IOException {
         App.setRoot("insertsong");
     }
+    @FXML
+    void onSearchClick(ActionEvent event) throws IOException {
+        App.setRoot("search");
+    }
 
 }

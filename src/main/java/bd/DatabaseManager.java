@@ -11,9 +11,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 
 public class DatabaseManager {
     private static Connection connection;
@@ -102,59 +104,60 @@ public class DatabaseManager {
     }
 
     public static boolean InDatabase(String name,String table) throws Exception{
-        if (!table.equals(artistTable) && !table.equals(songTable) && !table.equals(albumTable)) {
-            throw new Exception("Tablica " + table + " nie istnieje");
-        }
         try { 
-            PreparedStatement pst = connection.prepareStatement("SELECT id FROM projekt." + table + " where nazwa=? ",ResultSet.CONCUR_UPDATABLE);
-            pst.setString(1,name);
+            PreparedStatement pst = getConnection().prepareStatement("SELECT * FROM projekt.inDatabase(?, ?)");
+            pst.setString(1, name);
+            pst.setString(2, table);
             ResultSet rs = pst.executeQuery();
-            return rs.next();
+            if (rs.next()) {
+                return rs.getBoolean(1);
+            }
             }
             catch(SQLException e)  {
                 System.out.println(" Blad podczas przetwarzania danych:"+e); 
-                return false;  
             }
+            return false;
         }
 
-    public static void insertSong(){
+    public static boolean insertSong(String songName, String artistName,Integer year){
         try { 
+            PreparedStatement stmt = getConnection().prepareStatement("SET tempvar.artist_name = '" + artistName + "'");
+            stmt.execute();
             PreparedStatement pstSong = getConnection().prepareStatement( "INSERT INTO projekt.piosenka (nazwa,napisana) VALUES (?,?)" );
-            pstSong.setString(1, TempData.getSongName());
-            pstSong.setInt(2, TempData.getSongYear());
+            pstSong.setString(1, songName);
+            if(year != null){
+                pstSong.setInt(2, year);
+            }else{
+                pstSong.setNull(2, java.sql.Types.INTEGER);
+            }
             int rows = pstSong.executeUpdate();
             System.out.println("Polecenie -  INSERT Song - ilosc dodanych rekordow: " + String.valueOf(rows));
-            insertSongExtraTable(getSongLastID(TempData.getSongName()),getArtistID(TempData.getArtistName()));
+            return true;
+            // stmt.execute("RESET application_name");
         }catch(Exception e){
+            System.out.println(" Blad podczas przetwarzania danych:"+e); 
             Utilities.showError(e);
+            return false;
         }
     }
 
-    public static void insertSongExtraTable(int songID, int artistID){
+    public static void insertAlbum(String songName,String artistName, int artistID,String albumName,int year){
         try { 
-            PreparedStatement pst = getConnection().prepareStatement( "INSERT INTO projekt.artystapiosenka (piosenka_id,artysta_id) VALUES (?,?)" );
-            pst.setInt(1, songID);
-            pst.setInt(2, artistID);
-            int rows = pst.executeUpdate();
-            System.out.println("Polecenie -  INSERT SongArtistTable - ilosc dodanych rekordow: " + String.valueOf(rows));
-            if(TempData.getAlbumName() != null){
-                insertAlbum(songID, artistID);
-            }
-        }catch(Exception e){
-            Utilities.showError(e);
-        }
-    }
-
-    public static void insertAlbum(int songID, int artistID){
-        try { 
-            if(InDatabase(TempData.getAlbumName(), albumTable)){
-                insertAlbumExtraTable(songID, getAlbumID(TempData.getAlbumName(), artistID));
+            if(InDatabase(albumName, albumTable)){
+                CallableStatement cst = getConnection().prepareCall( "{call projekt.insertAlbum(?,?,?)}"); 
+                cst.setString(1, artistName);
+                cst.setString(2,songName);
+                cst.setString(3,albumName);
+                cst.execute();
                 return;
             }
+            songName = songName.replace("'","''");
+            PreparedStatement stmt = getConnection().prepareStatement("SET tempvar.song_name = '" + songName + "'");
+            stmt.execute();
             PreparedStatement pst = getConnection().prepareStatement( "INSERT INTO projekt.plyta (artysta_id,nazwa,napisana,okladka) VALUES (?,?,?,?)" );
             pst.setInt(1, artistID);
-            pst.setString(2, TempData.getAlbumName());
-            pst.setInt(3, TempData.getSongYear()); // Change with different implementation
+            pst.setString(2, albumName);
+            pst.setInt(3, year); // Change with different implementation
             
             File tempFile = TempData.getFile();
             if (tempFile != null) {
@@ -166,30 +169,20 @@ public class DatabaseManager {
 
             int rows = pst.executeUpdate();
             System.out.println("Polecenie -  INSERT Album - ilosc dodanych rekordow: " + String.valueOf(rows));
-            insertAlbumExtraTable(songID, getAlbumID(TempData.getAlbumName(), artistID));
         }catch(Exception e){
             Utilities.showError(e);
         }
     }
 
-    public static void insertAlbumExtraTable(int songID,int albumID){
-        try {
-            PreparedStatement pst = getConnection().prepareStatement( "INSERT INTO projekt.piosenkaplyta (piosenka_id,plyta_id) VALUES (?,?)" );
-            pst.setInt(1, songID);
-            pst.setInt(2, albumID);
-            int rows = pst.executeUpdate();
-            System.out.println("Polecenie -  INSERT AlbumExtraTable - ilosc dodanych rekordow: " + String.valueOf(rows));
-        } catch (Exception e) {
-            Utilities.showError(e);
-        }
-    }
-
-    public static void insertArtist(String name, Integer start,Integer end){
+    public static boolean insertArtist(String name, Integer start,Integer end){
         try { 
             PreparedStatement pstArtist = DatabaseManager.getConnection().prepareStatement( "INSERT INTO projekt.artysta (nazwa,poczatek_kariery,koniec_kariery) VALUES (?,?,?)" );
             pstArtist.setString(1, name);
-            pstArtist.setInt(2, start);
-            // pstArtist.setInt(3,end);
+            if(start != null){
+                pstArtist.setInt(2,start);
+            }else{
+                pstArtist.setNull(2, java.sql.Types.INTEGER);
+            }
             if(end != null){
                 pstArtist.setInt(3,end);
             }else{
@@ -197,10 +190,14 @@ public class DatabaseManager {
             }
             int rows = pstArtist.executeUpdate();
             System.out.println("Polecenie -  INSERT Artist - ilosc dodanych rekordow: " + String.valueOf(rows));
+            return true;
         }catch(Exception e){
+            System.out.println(" Blad podczas przetwarzania danych:"+e); 
             Utilities.showError(e);
+            return false;
         }
     }
+    
     public static int getDBLenght(){
         int size = 0;
         try {
@@ -218,8 +215,9 @@ public class DatabaseManager {
         return size;
     }
 
-    public static void populateGrid(int id,ArrayList<Label> songNameList,ArrayList<Label> albumNameList,ArrayList<Label> artistNameList,ArrayList<ImageView> imageList){
+    public static VBox populateGrid(int id,ArrayList<ImageView> imageList){
         int size = -1;
+        VBox vbox = new VBox();
         try {
             CallableStatement cst = getConnection().prepareCall( "{call projekt.getAllSongInfo(?)}" );
             cst.setInt(1, id);  
@@ -227,9 +225,21 @@ public class DatabaseManager {
             rs = cst.executeQuery();
             byte[] byteArray = null;
             if(rs.next()){
-                songNameList.add(new Label(rs.getString("nazwa_piosenki")));
-                albumNameList.add(new Label(rs.getString("nazwa_plyty")));
-                artistNameList.add(new Label(rs.getString("nazwa_artysty")));
+                vbox.setSpacing(5); 
+                vbox.setAlignment(Pos.CENTER)
+; 
+                Label songLabel = new Label(rs.getString("nazwa_piosenki"));
+                songLabel.getStyleClass().add("labelMainPage");
+
+                Label albumLabel = new Label(rs.getString("nazwa_plyty"));
+                albumLabel.getStyleClass().add("labelMainPage");
+
+                Label artistLabel = new Label(rs.getString("nazwa_artysty"));
+                artistLabel.getStyleClass().add("labelMainPage");
+
+
+                vbox.getChildren().addAll(songLabel, albumLabel, artistLabel);
+
                 byteArray = rs.getBytes("okladka");
             }
             Image img;
@@ -245,6 +255,70 @@ public class DatabaseManager {
         } catch (Exception e) {
             Utilities.showError(e);
         }
+        return vbox;
+    }
+    public static ArrayList<Song> searchSongs(String name){
+        ArrayList<Song> songs = new ArrayList<>();
+        try {
+            CallableStatement cst = getConnection().prepareCall( "{call projekt.searchSongs(?)}" );
+            cst.setString(1, name);
+            ResultSet rs = cst.executeQuery();
+            while (rs.next()) {
+                String songName = rs.getString("nazwa_piosenki");
+                String artistName = rs.getString("nazwa_artysty");
+                String albumName = rs.getString("nazwa_plyty");
+                Integer year = rs.getInt("rok_napisania");
+
+                Song song = new Song(songName, artistName, albumName, year);
+                songs.add(song);
+            }
+        } catch (Exception e) {
+            Utilities.showError(e);
+        }
+        return songs;
+    }
+
+    public static ArrayList<Artist> searchArtists(String name) {
+        ArrayList<Artist> artists = new ArrayList<>();
+        try {
+            CallableStatement cst = getConnection().prepareCall("{call projekt.searchArtist(?)}");
+            cst.setString(1, name);
+            ResultSet rs = cst.executeQuery();
+            
+            while (rs.next()) {
+                String artistName = rs.getString("nazwa_artysty");
+                Integer startYear = rs.getInt("poczatek_kariery");
+                Integer endYear = rs.getInt("koniec_kariery");
+    
+                Artist artist = new Artist(artistName, startYear, endYear);
+                artists.add(artist);
+            }
+        } catch (Exception e) {
+            Utilities.showError(e);
+        }
+        return artists;
+    }
+
+    public static ArrayList<Album> searchAlbums(String name) {
+        ArrayList<Album> albums = new ArrayList<>();
+        try {
+            CallableStatement cst = getConnection().prepareCall("{call projekt.searchAlbums(?)}");
+            cst.setString(1, name);
+            ResultSet rs = cst.executeQuery();
+    
+            while (rs.next()) {
+                String albumName = rs.getString("nazwa_albumu");
+                String artistName = rs.getString("nazwa_artysty");
+                Integer releaseYear = rs.getInt("rok_napisania");
+                byte[] cover = rs.getBytes("okladka");
+    
+                Album album = new Album(albumName, artistName, releaseYear, cover);
+                albums.add(album);
+            }
+        } catch (Exception e) {
+            Utilities.showError(e);
+        }
+        return albums;
     }
 
 }

@@ -2,8 +2,6 @@ package bd;
 
 import java.util.ArrayList;
 
-import javafx.scene.image.Image;
-
 
 public class Album {
     String albumName;
@@ -12,7 +10,14 @@ public class Album {
     Integer artistID;
     Integer year;
     ArrayList<Song> songList = new ArrayList<>();
-    Image okladka;
+    byte[] cover;
+
+    public Album(String albumName, String artistName, Integer year, byte[] cover) {
+        this.albumName = albumName;
+        this.artistName = artistName;
+        this.year = year;
+        this.cover = cover;
+    }
 
     public String getName(){
         return albumName;
