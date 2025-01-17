@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.Rating?>
+
+<BorderPane minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projekt.bd.SongPageController">
+<top>
+    <fx:include source="header.fxml" />
+</top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" styleClass="rating" stylesheets="@style.css" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="songNameLabel" text="SongName">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
+            <Label>
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <HBox alignment="CENTER_LEFT" prefHeight="424.0" prefWidth="1280.0" spacing="50.0">
+               <children>
+                  <ImageView fx:id="imageView" fitHeight="335.0" fitWidth="324.0" pickOnBounds="true" preserveRatio="true" />
+                  <VBox alignment="CENTER" prefHeight="424.0" prefWidth="361.0">
+                     <children>
+                        <Label text="Author:">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="artistNameLabel" text="AuthorName">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label text="Album">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="albumNameLabel" text="AlbumName">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Label text="Released on">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="year" />
+                        <Label text="Your rating">
+                           <font>
+                              <Font size="24.0" />
+                           </font>
+                        </Label>
+                        <Rating fx:id="rating" onMouseClicked="#setRating" onMouseExited="#resetRating" prefWidth="160.0" rating="0.0" updateOnHover="true" />
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets bottom="50.0" left="100.0" right="100.0" />
+               </VBox.margin>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

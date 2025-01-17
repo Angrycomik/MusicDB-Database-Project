@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane minHeight="720.0" minWidth="1280.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projekt.bd.LoginController">
+<top>
+    <fx:include source="header.fxml" />
+</top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="448.0" prefWidth="1280.0" spacing="15.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Enter login:">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <TextField fx:id="loginTextField" alignment="CENTER" prefWidth="819.0" promptText="Login">
+               <VBox.margin>
+                  <Insets left="500.0" right="500.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </TextField>
+            <Label text="Enter password">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <PasswordField fx:id="passwordField" alignment="CENTER" promptText="password">
+               <VBox.margin>
+                  <Insets left="500.0" right="500.0" />
+               </VBox.margin>
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </PasswordField>
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" styleClass="button-class" stylesheets="@style.css" text="LOGIN">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="100.0" />
+         </BorderPane.margin>
+      </VBox>
+   </center>
+</BorderPane>

@@ -1,4 +1,8 @@
 *.class
 *.log
+target\
 target/
 TO-DO.txt
+.vscode
+.idea
+out

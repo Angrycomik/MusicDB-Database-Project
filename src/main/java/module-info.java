@@ -1,10 +1,11 @@
-module bd {
+module projekt.bd {
     requires javafx.controls;
     requires javafx.fxml;
-    requires transitive java.sql;
+    requires org.controlsfx.controls;
+    requires com.fasterxml.jackson.databind;
+    requires java.sql;
     requires java.desktop;
-    requires org.json;
-    
-    opens bd to javafx.fxml;
-    exports bd;
+
+    opens projekt.bd to javafx.fxml;
+    exports projekt.bd;
 }
