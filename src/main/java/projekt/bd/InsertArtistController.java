@@ -47,8 +47,8 @@ public class InsertArtistController {
         Integer endInt = Utilities.parseInteger(endCareer.getText());
 
         
-        if(DatabaseManager.insertArtist(artistName.getText(), startInt, endInt)){
-            DatabaseManager.insertSong(TempData.getSongName(), artistName.getText(), TempData.getSongYear());
+        if(DatabaseManager.insertArtist(artistName.getText(), startInt, endInt,TempData.getYear())){
+            DatabaseManager.insertSong(TempData.getSongName(), artistName.getText(), TempData.getYear());
             if(TempData.getAlbumName()!=null){
                 DatabaseManager.insertAlbum(TempData.getSongName(),artistName.getText(), DatabaseManager.getArtistID(artistName.getText()), TempData.getAlbumName(), endInt,null);
             }

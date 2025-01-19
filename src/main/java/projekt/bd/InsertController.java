@@ -55,6 +55,8 @@ public class InsertController {
     private TextField albumTextField;
 
     File file = null;
+    HBox albumHBox;
+    Label fileLabel;
 
     @FXML
     public void initialize() {
@@ -74,54 +76,56 @@ public class InsertController {
     }
 
     private void addAlbumTextField() {
-        if (albumTextField == null) {
+        albumHBox = new HBox();
+        rootVBox.getChildren().add(rootVBox.getChildren().size() - 1, albumHBox);
+        albumHBox.setSpacing(225);
 
-            HBox albumHBox = new HBox();
-            rootVBox.getChildren().add(rootVBox.getChildren().size() - 1, albumHBox);
-            albumHBox.setSpacing(225);
+        albumTextField = new TextField();
+        albumTextField.setPromptText("Nazwa płyty");
+        albumHBox.getChildren().add(albumHBox.getChildren().size(), albumTextField);
 
-            albumTextField = new TextField();
-            albumTextField.setPromptText("Nazwa płyty");
-            albumHBox.getChildren().add(albumHBox.getChildren().size(), albumTextField);
+        Button filePickerButton = new Button("Wybierz okładkę");
+        albumHBox.getChildren().add(albumHBox.getChildren().size(), filePickerButton);
 
-            Button filePickerButton = new Button("Wybierz okładkę");
-            albumHBox.getChildren().add(albumHBox.getChildren().size(), filePickerButton);
+        fileLabel = new Label();
+        rootVBox.getChildren().add(rootVBox.getChildren().size() - 1, fileLabel);
 
-            Label fileLabel = new Label();
-            rootVBox.getChildren().add(rootVBox.getChildren().size() - 1, fileLabel);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
 
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
-
-            filePickerButton.setOnAction(event -> {
-                file = fileChooser.showOpenDialog(filePickerButton.getScene().getWindow());
-                if (file != null) {
-                    try {
-                        fileLabel.setText(file.getPath());
-                        BufferedImage img = Scalr.resize(ImageIO.read(file), 200,150);
-                        File resizedFile = new File("temp.jpg");
-                        ImageIO.write(img, "jpg", resizedFile);
-                        file = resizedFile;
-                        Image image = new Image(new FileInputStream("temp.jpg"));
-                        ImageView imageView = new ImageView(image); 
-                        imageView.setPreserveRatio(true);
-                        imagePane.getChildren().clear();
-                        imagePane.getChildren().add(imageView);
-                        imageView.setLayoutX(182);
-                        imageView.setLayoutY(50);
-                    } catch (Exception e) {
-                        Utilities.showError(e);
-                    }
+        filePickerButton.setOnAction(event -> {
+            file = fileChooser.showOpenDialog(filePickerButton.getScene().getWindow());
+            if (file != null) {
+                try {
+                    fileLabel.setText(file.getPath());
+                    BufferedImage img = Scalr.resize(ImageIO.read(file), 200, 150);
+                    File resizedFile = new File("temp.jpg");
+                    ImageIO.write(img, "jpg", resizedFile);
+                    file = resizedFile;
+                    Image image = new Image(new FileInputStream("temp.jpg"));
+                    ImageView imageView = new ImageView(image);
+                    imageView.setPreserveRatio(true);
+                    imagePane.getChildren().clear();
+                    imagePane.getChildren().add(imageView);
+                    imageView.setLayoutX(182);
+                    imageView.setLayoutY(50);
+                } catch (Exception e) {
+                    Utilities.showError(e);
                 }
-            });
-        }
-        
+            }
+        });
     }
 
     private void removeAlbumTextField() {
         if (albumTextField != null) {
+            albumHBox.getChildren().clear();
             rootVBox.getChildren().remove(albumTextField);
             albumTextField = null;
+            rootVBox.getChildren().remove(albumHBox);
+            imagePane.getChildren().clear();
+            file = null;
+            rootVBox.getChildren().remove(fileLabel);
+            fileLabel = null;
         }
     }
 
@@ -132,17 +136,14 @@ public class InsertController {
         if(albumTextField != null){
             tempAlbumName = albumTextField.getText();
         }
-        Integer songYearInt = null;
-        if(year.getText() != ""){
-            songYearInt = Integer.valueOf(year.getText());
-        }
-        // Integer albumYearInt = Integer.valueOf(albumTextField.getText());
-        Integer albumYearInt = songYearInt; // Implement
+        Integer songYearInt = Utilities.parseInteger(year.getText());
+        Integer albumYearInt = songYearInt;
         TempData.setData(songName.getText(),artistName.getText(),tempAlbumName,file,songYearInt,albumYearInt) ;
         
         try {
-            if(!artistName.getText().trim().isEmpty() && !DatabaseManager.InDatabase(artistName.getText(),"artysta")){
+            if(!DatabaseManager.InDatabase(artistName.getText(),"artysta")){
                 Utilities.showNotFound(artistName.getText());
+                TempData.setYear(songYearInt);
                 App.setRoot("insertartist");
             }else{
                 if(DatabaseManager.insertSong(songName.getText(),artistName.getText(),songYearInt)){

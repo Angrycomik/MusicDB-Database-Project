@@ -50,7 +50,7 @@ public class HeaderController {
     }
     void logout() {
         TempData.updateUserStatus(false);
-        TempData.setUser(null);
+        TempData.setUsername(null);
         TempData.setUserID(null);
         try {
             App.setRoot("mainscene");

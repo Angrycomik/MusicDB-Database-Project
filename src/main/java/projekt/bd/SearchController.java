@@ -6,9 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-
+import javafx.scene.text.Font;
+import jdk.jshell.execution.Util;
 
 
 public class SearchController {
@@ -29,10 +32,22 @@ public class SearchController {
     private VBox songBox;
 
     @FXML
+    private TextField searchField;
+
+    @FXML
     private ScrollPane songPane;
     @FXML
     void onKey(KeyEvent event) {
-        TextField searchField = (TextField) event.getSource();
+        if (event.getCode().equals(KeyCode.ENTER)){
+            getTextAndSearch();
+        }
+    }
+    @FXML
+    void onFocus(InputMethodEvent event) {
+        getTextAndSearch();
+    }
+
+    void getTextAndSearch(){
         String query = searchField.getText().trim();
         if (query.isEmpty()) {
             clearSearchResults();
@@ -48,9 +63,9 @@ public class SearchController {
     }
 
     private void performSearch(String query) {
-        ArrayList<Artist> artists = searchArtists(query);
-        ArrayList<Song> songs = searchSongs(query);
-        ArrayList<Album> albums = searchAlbums(query);
+        ArrayList<Artist> artists = DatabaseManager.searchArtists(query);
+        ArrayList<Song> songs = DatabaseManager.searchSongs(query);
+        ArrayList<Album> albums = DatabaseManager.searchAlbums(query);
 
         updateArtistResults(artists);
         updateSongResults(songs);
@@ -60,38 +75,34 @@ public class SearchController {
     private void updateArtistResults(ArrayList<Artist> artists) {
         artistBox.getChildren().clear();
         for (Artist artist : artists) {
-            Label artistLabel = new Label(artist.getName());
-            artistBox.getChildren().add(artistLabel);
+            Box box = new Box(artist.getName(),artist.getArtistID(),'v');
+            artistBox.getChildren().add(box);
+        }
+        if(artists.isEmpty()){
+            artistBox.getChildren().add(Utilities.notFoundLabel("No artists found"));
         }
     }
 
     private void updateSongResults(ArrayList<Song> songs) {
         songBox.getChildren().clear();
         for (Song song : songs) {
-            Label songLabel = new Label(song.getName() + " - " + song.getArtist());
-            songBox.getChildren().add(songLabel);
+            Box box = new Box(song.getImage(), song.getName(), song.getArtist(),song.getSongID(),song.getArtistID(),'s');
+            songBox.getChildren().add(box);
+        }
+        if(songs.isEmpty()){
+            songBox.getChildren().add(Utilities.notFoundLabel("No songs found"));
         }
     }
+
 
     private void updateAlbumResults(ArrayList<Album> albums) {
         albumBox.getChildren().clear();
         for (Album album : albums) {
-            Label albumLabel = new Label(album.getName() + " by " + album.getArtist());
-            albumBox.getChildren().add(albumLabel);
+            Box box = new Box(album.getImage(), album.getName(), album.getArtist(),album.getAlbumID(),album.getArtistID(),'a');
+            albumBox.getChildren().add(box);
+        }
+        if(albums.isEmpty()){
+            albumBox.getChildren().add(Utilities.notFoundLabel("No albums found"));
         }
     }
-
-    private ArrayList<Artist> searchArtists(String query) {
-        return DatabaseManager.searchArtists(query);
-    }
-
-    private ArrayList<Song> searchSongs(String query) {
-        return DatabaseManager.searchSongs(query); 
-    }
-
-    private ArrayList<Album> searchAlbums(String query) {
-        return DatabaseManager.searchAlbums(query);
-    }
-
-    
 }

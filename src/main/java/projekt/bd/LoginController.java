@@ -25,7 +25,7 @@ public class LoginController {
         if(DatabaseManager.checkLogin(login, passwordField.getText())){
             Utilities.showInformation("Logged in successfully!");
             TempData.updateUserStatus(true);
-            TempData.setUser(login);
+            TempData.setUsername(login);
             TempData.setUserID(DatabaseManager.getUserID(login));
             App.setRoot("mainscene");
         }

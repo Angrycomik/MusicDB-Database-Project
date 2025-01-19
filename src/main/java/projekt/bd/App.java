@@ -20,7 +20,8 @@ public class App extends Application {
         scene = new Scene(loadFXML("mainscene"));
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setScene(scene);
-        
+        stage.setMinWidth(1440);
+        stage.setMinHeight(896);
         stage.show();
         
         // ReadJsonData.fun();
@@ -39,6 +40,7 @@ public class App extends Application {
         try {
             DatabaseManager.setConnection();
         } catch (Exception e) {
+            Utilities.showError(e);
         }
         launch();
     }

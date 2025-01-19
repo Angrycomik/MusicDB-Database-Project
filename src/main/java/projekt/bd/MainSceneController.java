@@ -1,6 +1,9 @@
 package projekt.bd;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import javafx.event.ActionEvent;
@@ -22,10 +25,13 @@ public class MainSceneController {
     
     @FXML
     private BorderPane borderPane;
+
+    ArrayList<Integer> ids;
     
     @FXML
     public void initialize() {
-        if(DatabaseManager.getDBLenght() > 12){
+        ids = DatabaseManager.getSongIDs();
+        if(ids.size() > 12){
             if (!TempData.isGridSet()) {
                 makeNewGrid();
             } else {
@@ -44,9 +50,8 @@ public class MainSceneController {
         clearGrid();
         ArrayList<VBox> boxList = new ArrayList<>();
         ArrayList<ImageView> imageList = new ArrayList<>();
-        
-        int size = DatabaseManager.getDBLenght();
-        ArrayList<Integer> songList = randomList(size);
+
+        ArrayList<Integer> songList = new ArrayList<>(randomList());
     
         for (int i : songList) {
             boxList.add(DatabaseManager.populateGrid(i, imageList));
@@ -75,17 +80,18 @@ public class MainSceneController {
         }
     }
     
-    private ArrayList<Integer> randomList(int size) {
-        ArrayList<Integer> songList = new ArrayList<>();
-        Random rand = new Random();
-    
-        while (songList.size() < GRIDSIZE) {
-            int randInt = rand.nextInt(size) + 1;
-            if (!songList.contains(randInt)) {
-                songList.add(randInt);
-            }
-        }
-        return songList;
+    private List<Integer> randomList() {
+        Collections.shuffle(ids);
+        return ids.subList(0,GRIDSIZE);
+//        ArrayList<Integer> songList = new ArrayList<>();
+//        Random rand = new Random();
+//        int size = ids.size();
+//        while (songList.size() < GRIDSIZE) {
+//            int randInt = rand.nextInt(size) + 1;
+//            if (!songList.contains(randInt)) {
+//                songList.add(randInt);
+//            }
+//        }
     }
     private void clearGrid() {
         grid.getChildren().clear();

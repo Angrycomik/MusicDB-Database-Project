@@ -9,13 +9,15 @@ public class TempData {
     private static String _artistName;
     private static File _file;
     private static String _albumName;
+
     private static Integer _songYear;
     private static Integer _albumYear;
 
     private static String currentUser;
     private static Integer userID;
-    
-    private static Song song;
+
+    private static Integer visitUserID;
+    private static String visitUsername;
 
     private static Integer _chosenID;
 
@@ -34,19 +36,11 @@ public class TempData {
         _albumYear = albumYear;
     }
 
-    public static Song getSong() {
-        return song;
-    }
-
     public static Integer getChosen() {
         return _chosenID;
     }
     public static void setChosen(Integer chosen) {
         _chosenID= chosen;
-    }
-
-    public static void setSong(String songName,String artistName,String albumName,Integer albumYear) {
-        song = new Song(songName, artistName, albumName, albumYear);
     }
 
     public static boolean isGridSet() {
@@ -58,10 +52,10 @@ public class TempData {
     public static Integer getUserID(){
         return userID;
     }
-    public static void setUser(String name){
+    public static void setUsername(String name){
         currentUser = name;
     }
-    public static String getUser(){
+    public static String getUsername(){
         return currentUser;
     }
 
@@ -88,7 +82,11 @@ public class TempData {
         return _file;
     }
 
-    public static int getSongYear() {
+    public static void setYear(Integer _songYear) {
+        TempData._songYear = _songYear;
+    }
+
+    public static int getYear() {
         return _songYear;
     }
     public static void setGrid(ArrayList<VBox> gridBoxList, ArrayList<ImageView> gridImageList) {
@@ -117,7 +115,17 @@ public class TempData {
             tempFile.delete();
         }
     }
+    public static Integer getVisitUserID() {
+        Integer tempUserID = visitUserID;
+        visitUserID = null;
+        return tempUserID;
+    }
 
+    public static void setVisitUser(Integer visitUserID,String username) {
+        TempData.visitUserID = visitUserID;
+        TempData.visitUsername = username;
+    }
+    public static String getVisitUsername(){return visitUsername;}
 
 
 }

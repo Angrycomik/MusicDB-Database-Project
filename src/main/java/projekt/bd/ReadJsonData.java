@@ -45,7 +45,7 @@ public class ReadJsonData {
                 try {
                     if (!DatabaseManager.InDatabase(jsonObject.get("artist").asText(), "artysta")) {
                         System.out.println("Adding artist no " + String.valueOf(i));
-                        DatabaseManager.insertArtist(jsonObject.get("artist").asText(), start, end);
+                        DatabaseManager.insertArtist(jsonObject.get("artist").asText(), start, end,v);
                         DatabaseManager.insertSong(jsonObject.get("title").asText(), jsonObject.get("artist").asText(), v);
                         DatabaseManager.insertAlbum(jsonObject.get("title").asText(), jsonObject.get("artist").asText(), DatabaseManager.getArtistID(jsonObject.get("artist").asText()), jsonObject.get("album").asText(), v, jsonObject.get("run_order").asInt());
                         TempData.clear();

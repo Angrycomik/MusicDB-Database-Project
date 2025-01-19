@@ -11,19 +11,16 @@
     -fx-transition: all 0.14s ease-out;
     -fx-white-space: nowrap;
     -fx-font-weight: bold; 
-    -fx-text-fill: white; 
-    -fx-effect: dropshadow(gaussian, black, 2, 0, 0, 0); 
+    -fx-text-fill: white;
+    -fx-effect: dropshadow(gaussian, black, 2, 0.5, 0, 0);
+
 }
 
 
 .labelMainPage:hover {
-    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 4, 0, 4, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.75), 4, 0.5, 1, 1);
     -fx-translate-x: -4px;
     -fx-translate-y: -4px;
-}
-
-.labelMainPage:focus-visible {
-    -fx-outline-offset: 1px;
 }
 
 .button-class {
@@ -104,15 +101,17 @@
     -fx-border-color: rgba(29, 233, 182, 1.0); 
 }
 
-.text-field:focus {
-    -fx-background-color: white;
-    -fx-border-color: rgb(100, 153, 255); 
-}
-
 .scroll-pane .viewport {
     -fx-background-color: #f0fff0;
 }
 
+.box {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #ccc;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-padding: 5;
+}
 
 .root{
     -fx-background-color: #f0fff0;

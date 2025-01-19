@@ -15,36 +15,55 @@ import javafx.scene.layout.VBox;
 public class AlbumPageController {
 
     @FXML
-    private Label artistNameLabel;
-
-    @FXML
-    private ImageView imageView;
-
-    @FXML
     private VBox albumListBox;
-
-    @FXML
-    private ScrollPane albumListScrollPane;
 
     @FXML
     private Label albumNameLabel;
 
     @FXML
+    private Label artistNameLabel;
+
+    @FXML
+    private Rating avgRating;
+
+    @FXML
+    private ImageView imageView;
+
+    @FXML
     private Rating rating;
 
     @FXML
+    private ScrollPane songListScrollPane;
+
+    @FXML
     private TextField year;
+
     Album album;
+    Double globalRating;
 
     @FXML
     void setRating(MouseEvent event) {
         if(TempData.isUserLoggedIn()){
-            DatabaseManager.addRating(album.getAlbumID(), TempData.getUserID(), (int)rating.getRating());
+            System.out.println(album.getAlbumID());
+            DatabaseManager.addRating(album.getAlbumID(), TempData.getUserID(), (int)rating.getRating(),'a');
             album.setRating((int)rating.getRating());
             changeRatingBehavior();
+            globalRating();
         }else{
             Utilities.showInformation("You need to log in in order to rate.");
         }
+    }
+    private void globalRating(){
+        globalRating = DatabaseManager.getAverageRating(album.getAlbumID(),'a');
+        System.out.println(globalRating);
+        if(globalRating != null){
+            avgRating.setRating(globalRating);
+        }
+    }
+
+    @FXML
+    void onAvgClick(MouseEvent event) {
+        avgRating.setRating(globalRating);
     }
 
     @FXML
@@ -58,6 +77,7 @@ public class AlbumPageController {
         rating.setUpdateOnHover(false);
         rating.layout();
         rating.setRating(album.getRating());
+        globalRating();
     }
 
     public void initialize(){
@@ -65,12 +85,12 @@ public class AlbumPageController {
         try {
             album = DatabaseManager.getAlbumInfo(temp);
             artistNameLabel.setText(album.getArtist());
-            Utilities.turnLabelClickable(artistNameLabel, temp, "artistpage", "d");
+            Utilities.turnLabelClickable(artistNameLabel, temp, "artistpage", 'd');
 
             albumNameLabel.setText(album.getName());
             year.setText(String.valueOf(album.getYear()));
             imageView.setImage(album.getImage());
-            updatealbumList(album.getSongList());
+            updateAlbumList(album.getSongList());
         } catch (Exception e) {
             Utilities.showError(e);
         }
@@ -80,13 +100,17 @@ public class AlbumPageController {
                 changeRatingBehavior();
             }
         }
+        globalRating();
     }
 
-    private void updatealbumList(ArrayList<String> albums) {
+    private void updateAlbumList(ArrayList<String> albums) {
         albumListBox.getChildren().clear();
-        for (String albumName : albums) {
-            Label artistLabel = new Label(albumName);
-            albumListBox.getChildren().add(artistLabel);
+        ArrayList<Integer> songsIDList = album.getSongIDList();
+        for (int i = 0; i < albums.size(); i++) {
+            String albumName = albums.get(i);
+            Integer songID = songsIDList.get(i);
+            Box box = new Box(albumName, songID,'s');
+            albumListBox.getChildren().add(box);
         }
     }
 }

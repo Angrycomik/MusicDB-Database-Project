@@ -37,11 +37,13 @@ public class ArtistPageController {
     @FXML
     private Label tillLabel;
 
+    Artist artist;
+
     public void initialize(){
         Integer temp = TempData.getChosen();
 
         try {
-            Artist artist = DatabaseManager.getArtistInfo(temp);
+            artist = DatabaseManager.getArtistInfo(temp);
 
             artistNameLabel.setText(artist.getName());
 
@@ -58,18 +60,27 @@ public class ArtistPageController {
             Utilities.showError(e);
         }
     }
+
     private void updateSongList(ArrayList<String> songs) {
         songListBox.getChildren().clear();
-        for (String songName : songs) {
-            Label label = new Label(songName);
-            songListBox.getChildren().add(label);
+        ArrayList<Integer> songsIDList = artist.getSongIDList();
+        for (int i = 0; i < songs.size(); i++) {
+            String songName = songs.get(i);
+            Integer songID = songsIDList.get(i);
+            Box box = new Box(songName, songID,'s');
+            songListBox.getChildren().add(box);
         }
     }
     private void updateAlbumList(ArrayList<String> albums) {
         albumListBox.getChildren().clear();
-        for (String songName : albums) {
-            Label label = new Label(songName);
-            albumListBox.getChildren().add(label);
+
+        ArrayList<Integer> albumIDList = artist.getAlbumIDList();
+        for (int i = 0; i < albums.size(); i++) {
+            String albumName = albums.get(i);
+            Integer albumID = albumIDList.get(i);
+            System.out.println("album id for " + albumName + " is " + albumID);
+            Box box = new Box(albumName, DatabaseManager.getSongFromAlbum(albumID),'a');
+            albumListBox.getChildren().add(box);
         }
     }
 }

@@ -14,11 +14,14 @@ public class Song {
     private Image img;
     private Integer rating = null;
 
-    public Song(String songName, String artistName, String albumName, Integer year) {
+    public Song(String songName,Integer song_id, String artistName,Integer artistID, String albumName, Integer year,Image img) {
         this.songName = songName;
         this.artistName = artistName;
+        this.artistID = artistID;
         this.albumName = albumName;
         this.year = year;
+        this.img = img;
+        this.songID = song_id;
     }
     public Song(String songName, String artistName, String albumName, Integer year,Integer songartistid) {
         this.songName = songName;
@@ -56,4 +59,9 @@ public class Song {
     public Integer getRating(){
         return rating;
     }
+    public Integer getSongID(){
+        return songID;
+    }
+    public Integer getArtistID(){return artistID;}
+
 }

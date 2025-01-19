@@ -13,7 +13,7 @@
     <fx:include source="header.fxml" />
 </top>
    <center>
-      <GridPane fx:id="grid" alignment="CENTER" hgap="5.0" vgap="5.0" BorderPane.alignment="CENTER">
+      <GridPane fx:id="grid" alignment="CENTER" hgap="5.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="535.0" prefWidth="1245.0" vgap="5.0" BorderPane.alignment="CENTER">
         <columnConstraints>
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
           <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" />
@@ -31,7 +31,7 @@
       </GridPane>
    </center>
    <bottom>
-      <Button alignment="CENTER" mnemonicParsing="false" onAction="#refreshButton" styleClass="button-class" stylesheets="@style.css" text="Refresh" BorderPane.alignment="CENTER">
+      <Button alignment="CENTER" mnemonicParsing="false" onAction="#refreshButton" prefHeight="40.0" prefWidth="70.0" styleClass="button-class" stylesheets="@style.css" text="Refresh" textAlignment="CENTER" BorderPane.alignment="CENTER">
          <BorderPane.margin>
             <Insets bottom="5.0" />
          </BorderPane.margin>
