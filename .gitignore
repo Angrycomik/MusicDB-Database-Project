@@ -2,6 +2,7 @@
 *.log
 target\
 target/
+target
 TO-DO.txt
 .vscode
 .idea

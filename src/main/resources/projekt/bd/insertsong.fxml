@@ -37,7 +37,7 @@
                   <RadioButton fx:id="albumRadio" mnemonicParsing="false" text="Płyta" toggleGroup="$songType" />
                </children>
             </HBox>
-            <Button fx:id="addBtn" mnemonicParsing="false" onAction="#onAddClick" styleClass="button-class" stylesheets="@style.css" text="Dodaj" />
+            <Button fx:id="addBtn" mnemonicParsing="false" onAction="#onAddClick" prefHeight="40.0" prefWidth="60.0" styleClass="button-class" stylesheets="@style.css" text="Dodaj" />
          </children>
          <padding>
             <Insets left="400.0" top="-200.0" />

@@ -83,7 +83,7 @@
                                     <Font size="24.0" />
                                  </font>
                               </Label>
-                              <Rating fx:id="avgRating" partialRating="true" prefWidth="160.0" rating="0.0" />
+                              <Rating fx:id="avgRating" onMouseClicked="#onAvgClick" partialRating="true" prefWidth="160.0" rating="0.0" />
                            </children>
                         </VBox>
                         <ScrollPane prefHeight="382.0" prefWidth="415.0">
@@ -110,8 +110,14 @@
                   <Pane prefHeight="176.0" prefWidth="985.0" />
                   <VBox alignment="CENTER" prefHeight="176.0" prefWidth="456.0" spacing="5.0">
                      <children>
-                        <TextField fx:id="reviewTextField" alignment="CENTER" prefHeight="122.0" prefWidth="456.0" promptText="Write your review" />
-                        <Button mnemonicParsing="false" onAction="#submitReview" styleClass="button-class" stylesheets="@style.css" text="Button" />
+                        <TextField fx:id="reviewTextField" alignment="CENTER" prefHeight="122.0" prefWidth="441.0" promptText="Write your review">
+                           <VBox.margin>
+                              <Insets right="25.0" />
+                           </VBox.margin></TextField>
+                        <Button mnemonicParsing="false" onAction="#submitReview" prefHeight="40.0" prefWidth="70.0" styleClass="button-class" stylesheets="@style.css" text="Submit">
+                           <VBox.margin>
+                              <Insets right="25.0" />
+                           </VBox.margin></Button>
                      </children>
                   </VBox>
                </children>

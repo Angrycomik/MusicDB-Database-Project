@@ -42,7 +42,7 @@
                   <Font size="18.0" />
                </font>
             </PasswordField>
-            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" styleClass="button-class" stylesheets="@style.css" text="SIGN UP">
+            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#register" prefHeight="50.0" prefWidth="105.0" styleClass="button-class" stylesheets="@style.css" text="SIGN UP">
                <font>
                   <Font size="18.0" />
                </font>

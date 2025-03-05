@@ -1,11 +1,14 @@
 package projekt.bd;
 
-import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+import java.io.IOException;
+
+/**
+ * This class is a controller for header.fxml file.
+ */
 public class HeaderController {
 
     @FXML
@@ -17,37 +20,66 @@ public class HeaderController {
     @FXML
     private Button signupButton;
 
+    /**
+     * Redirects user to login page.
+     * @param event on mouse click event
+     * @throws IOException
+     */
     @FXML
     void login(ActionEvent event) throws IOException {
         App.setRoot("login");
     }
-    
+    /**
+     * Redirects user to registration page.
+     * @param event on mouse click event
+     * @throws IOException
+     */
     @FXML
     void signup(ActionEvent event) throws IOException {
         App.setRoot("register");
     }
-
+    /**
+     * Redirects user to main page.
+     * @param event on mouse click event
+     * @throws IOException
+     */
     @FXML
-    void logoBtnClick(ActionEvent event)  throws IOException {
+    void logoBtnClick(ActionEvent event) throws IOException {
         App.setRoot("mainscene");
     }
-
+    /**
+     * Redirects user to song adding page.
+     * @param event on mouse click event
+     * @throws IOException
+     */
     @FXML
     void onImportClick(ActionEvent event) throws IOException {
         App.setRoot("insertsong");
     }
+    /**
+     * Redirects user to search page.
+     * @param event on mouse click event
+     * @throws IOException
+     */
     @FXML
     void onSearchClick(ActionEvent event) throws IOException {
         App.setRoot("search");
     }
-    
-    void onProfileClick(){
+    /**
+     * Redirects user to profile page.
+     * @throws IOException
+     */
+    void onProfileClick() {
         try {
             App.setRoot("profile");
         } catch (IOException e) {
             Utilities.showError(e);
         }
     }
+    /**
+     * Logs user out.
+     * @throws IOException
+     */
     void logout() {
         TempData.updateUserStatus(false);
         TempData.setUsername(null);
@@ -59,15 +91,18 @@ public class HeaderController {
         }
     }
 
-    public void initialize(){
-        
+    /**
+     * This method initializes header buttons, changing them if the user is logged in.
+     */
+    public void initialize() {
+
         if (TempData.isUserLoggedIn()) {
             signupButton.setText("Logout");
             loginButton.setText("Profile");
             signupButton.setOnAction(event -> logout());
             loginButton.setOnAction(event -> onProfileClick());
         }
-    
+
 
     }
 

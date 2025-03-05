@@ -42,7 +42,7 @@
                   <Font size="18.0" />
                </font>
             </PasswordField>
-            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" styleClass="button-class" stylesheets="@style.css" text="LOGIN">
+            <Button fx:id="loginButton" mnemonicParsing="false" onAction="#login" prefHeight="50.0" prefWidth="80.0" styleClass="button-class" stylesheets="@style.css" text="LOGIN">
                <font>
                   <Font size="18.0" />
                </font>

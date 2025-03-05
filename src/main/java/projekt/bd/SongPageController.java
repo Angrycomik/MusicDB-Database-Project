@@ -3,17 +3,18 @@ package projekt.bd;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.util.Pair;
 import org.controlsfx.control.Rating;
 
-import javafx.fxml.FXML;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-
 import java.util.ArrayList;
-
+/**
+ * This class is a controller for songpage.fxml file.
+ */
 public class SongPageController {
 
     @FXML
@@ -46,50 +47,68 @@ public class SongPageController {
     @FXML
     private TextField year;
 
-    
+
     private Song song;
     Double globalRating;
     ArrayList<Review> reviews;
-
+    /**
+     * This method is used to set rating element's rating.
+     * @param event On mouse click event.
+     */
     @FXML
     void setRating(MouseEvent event) {
-        if(TempData.isUserLoggedIn()){
-            DatabaseManager.addRating(song.getSongArtistID(), TempData.getUserID(), (int)rating.getRating(),'s');
-            song.setRating((int)rating.getRating());
+        if (TempData.isUserLoggedIn()) {
+            DatabaseManager.addRating(song.getSongArtistID(), TempData.getUserID(), (int) rating.getRating(), 's');
+            song.setRating((int) rating.getRating());
             changeRatingBehavior();
-        }else{
+        } else {
             Utilities.showInformation("You need to log in in order to rate.");
         }
     }
-    private void globalRating(){
-        globalRating = DatabaseManager.getAverageRating(song.getSongArtistID(),'s');
+    /**
+     * This method is used to update the average rating.
+     */
+    private void globalRating() {
+        globalRating = DatabaseManager.getAverageRating(song.getSongArtistID(), 's');
         System.out.println(globalRating);
-        if(globalRating != null){
+        if (globalRating != null) {
             avgRating.setRating(globalRating);
         }
     }
 
+    /**
+     * This method resets the rating back to 0 after the user hovers and does not change the value.
+     * @param event on mouse drag event
+     */
     @FXML
     void resetRating(MouseEvent event) {
         rating.setRating(0);
-        if(TempData.isUserLoggedIn() && song.getRating()!=null){
+        if (TempData.isUserLoggedIn() && song.getRating() != null) {
             rating.setRating(song.getRating());
         }
     }
-    void changeRatingBehavior(){
+    /**
+     * This method updates some attributes of the rating element after using rates a song.
+     */
+    void changeRatingBehavior() {
         rating.setUpdateOnHover(false);
         rating.layout();
         rating.setRating(song.getRating());
         globalRating();
 
     }
-
+    /**
+     * This method changes the average rating value back to its value if the user tries to change it.
+     * @param event on mouse click event
+     */
     @FXML
     void onAvgClick(MouseEvent event) {
-            avgRating.setRating(globalRating);
+        avgRating.setRating(globalRating);
     }
-
-    public void initialize(){
+    /**
+     * This method is initializing elements during the page loading, such as rating, label names and updates pane's content, also retrieves the information from the database.
+     */
+    public void initialize() {
         Integer temp = TempData.getChosen();
         try {
             song = DatabaseManager.getSongInfo(temp);
@@ -101,14 +120,14 @@ public class SongPageController {
             artistNameLabel.setText(song.getArtist());
             Utilities.turnLabelClickable(artistNameLabel, temp, "artistpage", 'd');
 
-            year.setText(String.valueOf(song.getYear()));
+            year.setText(String.valueOf(song.getReleaseYear()));
             imageView.setImage(song.getImage());
         } catch (Exception e) {
             Utilities.showError(e);
         }
-        if(TempData.isUserLoggedIn()){
-            song.setRating(DatabaseManager.getRating(TempData.getUserID(),song.getSongArtistID(),'s'));
-            if(song.getRating()!=null){
+        if (TempData.isUserLoggedIn()) {
+            song.setRating(DatabaseManager.getRating(TempData.getUserID(), song.getSongArtistID(), 's'));
+            if (song.getRating() != null) {
                 changeRatingBehavior();
             }
         }
@@ -116,9 +135,13 @@ public class SongPageController {
         updateReviewPane();
     }
 
+    /**
+     * This method opens a window for creating a playlist or adding song to a playlist.
+     * @param event
+     */
     @FXML
     void addToPlaylist(ActionEvent event) {
-        if(!TempData.isUserLoggedIn()){
+        if (!TempData.isUserLoggedIn()) {
             Utilities.showInformation("You need to log in in order to create playlist.");
             return;
         }
@@ -162,10 +185,10 @@ public class SongPageController {
             int index;
             if (!playlists.contains(selected)) {
                 index = DatabaseManager.addPlaylist(selected);
-                DatabaseManager.addSongToPlaylist(index,song.getSongArtistID());
-            }else{
+                DatabaseManager.addSongToPlaylist(index, song.getSongArtistID());
+            } else {
                 index = playlists.indexOf(selected);
-                DatabaseManager.addSongToPlaylist(playlistIDs.get(index),song.getSongArtistID());
+                DatabaseManager.addSongToPlaylist(playlistIDs.get(index), song.getSongArtistID());
 
             }
 
@@ -173,26 +196,33 @@ public class SongPageController {
         });
     }
 
+    /**
+     * This method adds the review to a song.
+     * @param event
+     */
     @FXML
     void submitReview(ActionEvent event) {
-        if(!TempData.isUserLoggedIn()){
+        if (!TempData.isUserLoggedIn()) {
             Utilities.showInformation("You need to log in in order to submit a review");
             return;
         }
         String reviewText = reviewTextField.getText();
-        if(DatabaseManager.addReview(reviewText)){
+        if (DatabaseManager.addReview(reviewText, song.getSongArtistID())) {
             updateReviewPane();
         }
     }
+    /**
+     * This method retrieves reviews from database and updates the review pane.
+     */
     private void updateReviewPane() {
-        reviews = DatabaseManager.getReviews();
+        reviews = DatabaseManager.getReviews(song.getSongArtistID());
         reviewBox.getChildren().clear();
         for (int i = 0; i < reviews.size(); i++) {
             Review review = reviews.get(i);
             int userID = review.getUserID();
             String username = review.getUsername();
             String reviewText = review.getReviewText();
-            Box box = new Box(username,userID,reviewText);
+            Box box = new Box(username, userID, reviewText);
             reviewBox.getChildren().add(box);
         }
     }

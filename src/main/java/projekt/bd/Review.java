@@ -1,10 +1,18 @@
 package projekt.bd;
-
+/**
+ * This class represents Review with main information about it.
+ */
 public class Review {
-    private int userID;
-    private String username;
-    private String reviewText;
+    private final int userID;
+    private final String username;
+    private final String reviewText;
 
+    /**
+     * Constructor for a review class.
+     * @param userID user id
+     * @param username username
+     * @param reviewText review text
+     */
     public Review(int userID, String username, String reviewText) {
         this.userID = userID;
         this.username = username;
